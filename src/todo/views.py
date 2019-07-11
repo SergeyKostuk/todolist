@@ -11,17 +11,17 @@ from django.shortcuts import (
 # Create your views here.
 
 
-
 def home(request):
-    list_of_objects = list(DoList.objects.all())
+
+
     if request.method == 'GET':
 
-        context = {'a': list_of_objects}
+        context = {'a': (DoList.objects.all())}
         return render(request, 'home.html', context)
 
     elif request.method == "POST":
         if request.POST.get("save"):
-            for item in list_of_objects:
+            for item in DoList.objects.all():
                 if request.POST.get("c" + str(item.id)) == "clicked":
                     item.complite = True
                 else:
@@ -37,7 +37,7 @@ def home(request):
 
 
 def add_new(request):
-    list_of_objects = list(DoList.objects.all())
+
     if request.method == 'GET':
         context = {'form': ToDo()}
         return render(request, 'add_new.html', context)
@@ -45,11 +45,11 @@ def add_new(request):
         form = ToDo(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            new_do = DoList.objects.create(
+            DoList.objects.create(
                 line=data.get('line'),
 
             )
-            list_of_objects.append(new_do)
+
             return redirect('home')
         else:
             errors = form.errors
@@ -60,7 +60,7 @@ def add_new(request):
 
 
 def edit_record(request, do_id):
-    list_of_objects = list(DoList.objects.all())
+    
     try:
         doing = DoList.objects.get(id=do_id)
     except:
@@ -79,7 +79,6 @@ def edit_record(request, do_id):
 
         return render(request, 'edit_record.html', context)
     elif request.method == 'POST':
-        list_of_objects = list(DoList.objects.all())
         form = ToDo(request.POST)
         if form.is_valid():
             data = form.cleaned_data
@@ -88,12 +87,7 @@ def edit_record(request, do_id):
                 line=data.get('line'),
 
             )
-            changed_do = list(DoList.objects.filter(id=do_id))
-            for i in list_of_objects:
-                if i.id == do_id:
-                    index = list_of_objects.index(i)
-                    list_of_objects[index] = changed_do[0]
-                    break
+
 
             return redirect('home')
         else:
@@ -103,16 +97,11 @@ def edit_record(request, do_id):
 
 
 def remove_record(request, do_id):
-    list_of_objects = list(DoList.objects.all())
+
     try:
         do = DoList.objects.get(id=do_id)
     except:
         return render(request, 'some_error.html')
     do.delete()
-    for i in list_of_objects:
-        if i.id == do_id:
-            index = list_of_objects.index(i)
-            break
 
-    del list_of_objects[index]
     return redirect('home')

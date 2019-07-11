@@ -9,10 +9,11 @@ from django.shortcuts import (
 )
 
 # Create your views here.
-list_of_objects = list(DoList.objects.all())
+
 
 
 def home(request):
+    list_of_objects = list(DoList.objects.all())
     if request.method == 'GET':
 
         context = {'a': list_of_objects}
@@ -36,6 +37,7 @@ def home(request):
 
 
 def add_new(request):
+    list_of_objects = list(DoList.objects.all())
     if request.method == 'GET':
         context = {'form': ToDo()}
         return render(request, 'add_new.html', context)
@@ -58,6 +60,7 @@ def add_new(request):
 
 
 def edit_record(request, do_id):
+    list_of_objects = list(DoList.objects.all())
     try:
         doing = DoList.objects.get(id=do_id)
     except:
@@ -76,6 +79,7 @@ def edit_record(request, do_id):
 
         return render(request, 'edit_record.html', context)
     elif request.method == 'POST':
+        list_of_objects = list(DoList.objects.all())
         form = ToDo(request.POST)
         if form.is_valid():
             data = form.cleaned_data
@@ -99,6 +103,7 @@ def edit_record(request, do_id):
 
 
 def remove_record(request, do_id):
+    list_of_objects = list(DoList.objects.all())
     try:
         do = DoList.objects.get(id=do_id)
     except:
@@ -110,30 +115,4 @@ def remove_record(request, do_id):
             break
 
     del list_of_objects[index]
-    return redirect('home')
-
-
-def down_record(request, do_id):
-    if request.method == 'GET':
-        for i in list_of_objects:
-            if i.id == do_id:
-                index = list_of_objects.index(i)
-                break
-        if index == len(list_of_objects) - 1:
-            return render(request, 'some_error.html')
-        list_of_objects[index], list_of_objects[index + 1] = list_of_objects[index + 1], list_of_objects[index]
-
-    return redirect('home')
-
-
-def up_record(request, do_id):
-    if request.method == 'GET':
-        for i in list_of_objects:
-            if i.id == do_id:
-                index = list_of_objects.index(i)
-                break
-        if not index:
-            return render(request, 'some_error.html')
-        list_of_objects[index], list_of_objects[index - 1] = list_of_objects[index - 1], list_of_objects[index]
-
     return redirect('home')

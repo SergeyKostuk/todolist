@@ -9,14 +9,12 @@
                     <li><input type="checkbox", value="clicked", name="c{{item.id}}" checked>{{item.line}}
                         <a href="{% url 'edit_record' item.id %}">&#9998;</a>
                         <a href="{% url 'remove_record' item.id %}">&#10008;</a>
-                        <a href="{% url 'down_record' item.id %}">&#11015;</a>
-                        <a href="{% url 'up_record' item.id %}">&#11014;</a>
+                        
                     </li>
                 {% else %}
                     <li><input type="checkbox", value="clicked", name="c{{item.id}}">{{item.line}}<a href="{% url 'edit_record' item.id %}">&#9998;</a>
                         <a href="{% url 'remove_record' item.id %}">&#10008;</a>
-                    <a href="{% url 'down_record' item.id %}">&#11015;</a>
-                    <a href="{% url 'up_record' item.id %}">&#11014;</a>
+                    
     </li>
                 {% endif %}
 
